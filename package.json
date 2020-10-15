@@ -1,0 +1,19 @@
+{
+  "name": "startechup-academy-nodejs-project",
+  "version": "1.0.0",
+  "description": "A variation project of Startechup Academy NodeJS course",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/geraldjaydlagarto/startechup-academy-nodejs-project.git"
+  },
+  "author": "Gerald Jay Lagarto",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/geraldjaydlagarto/startechup-academy-nodejs-project/issues"
+  },
+  "homepage": "https://github.com/geraldjaydlagarto/startechup-academy-nodejs-project#readme"
+}
