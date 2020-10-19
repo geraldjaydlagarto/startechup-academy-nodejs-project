@@ -2,7 +2,7 @@ const OrganizationService = require("../services/organization.service")
 
 const GetAllOrganization = async (req, res) => {
     try {
-        const organizations = OrganizationService.Find
+        const organizations = await OrganizationService.Find()
         return res.status(200).json({
             message: 'Ok',
             data: organizations
