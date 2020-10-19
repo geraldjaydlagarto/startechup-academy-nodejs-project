@@ -2,7 +2,7 @@ const UserService = require('../services/user.service')
 
 const GetAllUsers = async (req, res) => {
     try {
-        const users = await UserService.Fin()
+        const users = await UserService.Find()
         return res.status(200).json({
             data: users
         })
@@ -49,12 +49,12 @@ const UpdateUser = async(req, res) => {
         const existingUser = await UserService.FindOne({
             _id: user_id
         })
-        if(existingUser){
+        if(!existingUser){
             return res.status(409).json({
-                message: "User already exist"
+                message: "User does not exist"
             })
         }
-        await UserService.AddUser(newUser)
+        await UserService.FindOneAndUpdate(newUser)
         return res.status(200).json({
             message: "User updated",
             data: newUser
@@ -69,11 +69,11 @@ const UpdateUser = async(req, res) => {
 const DeleteUser = async(req, res) => {
     try {
         const { user_id } = req.params
-        await UserService.DeleteUser({
+        await UserService.DeleteOne({
             _id: user_id
         })
         return res.status('200').json({
-            message: "User delete",
+            message: "User deleted",
         })
     } catch (error) {
         return res.status(403).json({
