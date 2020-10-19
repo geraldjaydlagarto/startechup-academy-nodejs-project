@@ -1,4 +1,3 @@
-const organizationService = require("../services/organization.service")
 const OrganizationService = require("../services/organization.service")
 
 const GetAllOrganizations = async (req, res) => {
@@ -51,7 +50,7 @@ const AddOrganization = async (req, res) => {
 
 const UpdateOrganization = async (req, res) => {
     try {
-        const {organization_id} = req.params
+        const { organization_id } = req.params
         const {
             org_name,
             org_description,
