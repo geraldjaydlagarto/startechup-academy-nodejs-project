@@ -2,7 +2,7 @@ const UserService = require('../services/user.service')
 
 const GetAllUsers = async (req, res) => {
     try {
-        const users = await UserService.FindOne()
+        const users = await UserService.Fin()
         return res.status(200).json({
             data: users
         })
@@ -27,7 +27,7 @@ const AddUser = async (req, res) => {
                 message: "User already exist"
             })
         }
-        await UserService.AddUser(newUser)
+        await UserService.Create(newUser)
         return res.status(200).json({
             message: "User inserted",
             data: newUser
