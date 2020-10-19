@@ -1,6 +1,7 @@
+const organizationService = require("../services/organization.service")
 const OrganizationService = require("../services/organization.service")
 
-const GetAllOrganization = async (req, res) => {
+const GetAllOrganizations = async (req, res) => {
     try {
         const organizations = await OrganizationService.Find()
         return res.status(200).json({
@@ -20,7 +21,8 @@ const AddOrganization = async (req, res) => {
             org_country,
             org_city,
             org_picture,
-        } = req.body
+        } = req.body  
+
         const existing_organization = await OrganizationService.FindOne({
             org_name
         })
@@ -47,7 +49,60 @@ const AddOrganization = async (req, res) => {
     }
 }
 
+const UpdateOrganization = async (req, res) => {
+    try {
+        const {organization_id} = req.params
+        const {
+            org_name,
+            org_description,
+            org_country,
+            org_city,
+            org_picture,
+        } = req.body
+        
+        const organization = await OrganizationService.FindOne({
+            _id: organization_id
+        })
+
+        if(!organization) {
+            return res.status(404).json({
+                message: 'Data not found'
+            })
+        } 
+
+        await OrganizationService.FindOneAndUpdate(
+            { _id: organization_id },
+            {
+                org_name,
+                org_description,
+                org_country,
+                org_city,
+                org_picture,
+            }
+            )
+        return res.status(200).json({
+            message: 'Ok',
+        })   
+    } catch (error) { 
+        console.log('error', error)
+    }
+}
+
+const DeleteOrganization = async (req, res) => {
+    try {
+        const { organization_id } = req.params
+        await OrganizationService.DeleteOne({_id: organization_id})
+        return res.status(200).json({
+            message: 'Deleted',
+        })
+    } catch (error) {
+        console.log('error', error)
+    }
+}
+
 module.exports = {
-    GetAllOrganization,
-    AddOrganization
+    GetAllOrganizations,
+    AddOrganization,
+    UpdateOrganization,
+    DeleteOrganization
 }
