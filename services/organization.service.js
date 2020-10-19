@@ -21,7 +21,7 @@ const FindOneAndUpdate = async (filter, data) => {
     return organization
 }
 
-const DeleteOne = async (data) => {
+const DeleteOne = async (filter) => {
     const organization = await Organization.deleteOne(filter)
     return organization
 }
