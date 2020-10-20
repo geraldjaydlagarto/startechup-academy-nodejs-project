@@ -1,7 +1,9 @@
 const Execute = async (res, handler) => {
+    console.log('execute')
     try {
         return await handler()
     } catch (error) {
+        console.log('error', error)
         return Error(res, 403, 'Ipinagbabawal')
     }
 }

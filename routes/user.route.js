@@ -4,9 +4,9 @@ const router = express.Router()
 const UserController = require('../controllers/user.controller')
 
 router.get('/users', UserController.GetAllUsers)
-router.get('/users/:user_type', UserController.GetUsersByType)
+router.get('/users/:userType', UserController.GetUsersByType)
 router.get('/user/:userId', UserController.GetUserById)
-router.get('/users/:userId/organizations', UserController.GetOrganizationsByUser)
+router.get('/user/:userId/organizations', UserController.GetOrganizationsByUser)
 
 router.post('/user', UserController.AddUser)
 

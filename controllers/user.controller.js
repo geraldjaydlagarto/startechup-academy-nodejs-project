@@ -9,17 +9,17 @@ const GetAllUsers = async (req, res) => Utils.Execute(res, async () => {
 
 const GetOrganizationsByUser = async (req, res) => Utils.Execute(res, async () => {
     const { userId } = req.params
-    const organizations = await UserService.FindAndPopulate({
-        _id, userId},
+    const organizations = await UserService.FindAndPopulate(
+        { _id: userId },
         'organizations'
     )
     return Utils.Success(res, organizations)
 })
 
-const GetUsersByType = async ( req, res) => Utils.Execute(res, async () => {
-    const { user_type } = req.params
+const GetUsersByType = async (req, res) => Utils.Execute(res, async () => {
+    const { userType } = req.params
     const users = await UserService.Find({
-        userType: user_type
+        userType: userType
     })
     return Utils.Success(res, users)
 })
@@ -71,7 +71,7 @@ const DeleteUser = async (req, res) => Utils.Execute(res, async () => {
 
 module.exports = {
     GetAllUsers,
-    GetOrganizationsByUser, 
+    GetOrganizationsByUser,
     GetUserById,
     GetUsersByType,
     AddUser,

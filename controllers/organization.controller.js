@@ -20,12 +20,10 @@ const GetAdminsByOrganization = async (req, res) => Utils.Execute(res, async () 
 const AddOrganization = async (req, res) => Utils.Execute(res, async () => {
     const newOrganization = ParseOrganization(req)
     const existingOrganization = await OrganizationService.FindOne({
-        org_name
+        org_name: newOrganization.org_name
     })
     if (existingOrganization) {
-        return res.status(409).json({
-            message: 'Data exists',
-        })
+        return Util.Error(res, 409, "Organization already exist")
     }
     const organization = await OrganizationService.Create(newOrganization)
     return Utils.Success(res, organization)
@@ -39,7 +37,7 @@ const UpdateOrganization = async (req, res) => Utils.Execute(res, async () => {
     })
 
     if (!oldData) {
-        return Utils.Error(res, 404, "Organization does not exist.")
+        return Utils.Error(res, 404, "Organization does not exist")
     }
 
     const organizaiton = await OrganizationService.FindOneAndUpdate(
