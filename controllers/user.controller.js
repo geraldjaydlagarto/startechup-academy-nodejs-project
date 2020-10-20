@@ -2,7 +2,7 @@ const UserService = require('../services/user.service')
 
 const GetAllUsers = async (req, res) => {
     try {
-        const users = await UserService.Find()
+        const users = await UserService.Find({})
         return res.status(200).json({
             data: users
         })
@@ -32,11 +32,11 @@ const GetUsersByType = async(req, res) => {
 const GetUserById = async(req, res) => {
     try {
         const { user_id } = req.params
-        const user = await UserService.Find({
+        const user = await UserService.FindOne({
             _id: user_id
         })
         if(!user) {
-            return res.status(403).json({
+            return res.status(409).json({
                 message: 'User does not exists'
             })
         }
@@ -52,22 +52,26 @@ const GetUserById = async(req, res) => {
 
 const AddUser = async (req, res) => {
     try {
-        const new_user = {
-            user_last_name,
-            user_first_name
+        const newUser = {
+            username,
+            name,
+            email,
+            password,
+            country,
+            userType
         } = req.body
-        const existing_user = await UserService.FindOne({
-            user_last_name: new_user.user_last_name
+        const existingUser = await UserService.FindOne({
+            email: newUser.email
         })
-        if(existing_user){
+        if(existingUser){
             return res.status(409).json({
                 message: "User already exist"
             })
         }
-        await UserService.Create(new_user)
+        await UserService.Create(newUser)
         return res.status(200).json({
             message: "User inserted",
-            data: new_user
+            data: newUser
         })
     } catch (error) {
         return res.status(403).json({
@@ -79,22 +83,26 @@ const AddUser = async (req, res) => {
 const UpdateUser = async(req, res) => {
     try {
         const { user_id } = req.params
-        const new_user = {
-            user_last_name,
-            user_first_name
+        const newData = {
+            username,
+            name,
+            email,
+            password,
+            country,
+            userType
         } = req.body
-        const existing_user = await UserService.FindOne({
+        const oldData = await UserService.FindOne({
             _id: user_id
         })
-        if(!existing_user){
+        if(!oldData){
             return res.status(409).json({
                 message: "User does not exist"
             })
         }
-        await UserService.FindOneAndUpdate(new_user)
+        await UserService.FindOneAndUpdate(newData)
         return res.status(200).json({
             message: "User updated",
-            data: new_user
+            data: newData
         })
     } catch (error) {
         return res.status(403).json({
