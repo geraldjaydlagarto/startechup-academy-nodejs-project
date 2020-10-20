@@ -27,4 +27,15 @@ const UserSchema = new mongoose.Schema(
 )
 
 const User = mongoose.model('user', UserSchema, 'user')
-module.exports = User
+
+const ParseUser = {
+    username,
+    name,
+    email,
+    password,
+    country,
+    language,
+    userType
+} = (req) => { return req.body }
+
+module.exports = { User, ParseUser }
