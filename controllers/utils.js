@@ -9,12 +9,12 @@ const Execute = async (res, handler) => {
 }
 
 const Success = (res, data) => {
-    if (data) {
-        return res.status(200).json({
-            data: data
-        })
-    } else {
-        return res.status(200).json({})
+    return res.status(200).json(data)
+}
+
+const Data = (data) => {
+    return {
+        data: data
     }
 }
 
@@ -28,4 +28,5 @@ module.exports = {
     Execute,
     Success,
     Error,
+    Data,
 }

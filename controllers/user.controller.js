@@ -69,7 +69,7 @@ const DeleteUser = async (req, res) => Utils.Execute(res, async () => {
     await UserService.DeleteOne({
         _id: userId
     })
-    return Utils.Success(res, null)
+    return res.status(200)
 })
 
 const Login = async (req, res) => Utils.Execute(res, async () => {
@@ -98,7 +98,7 @@ const Logout = async (req, res) => Utils.Execute(res, async () => {
     const authorization = req.headers['x-access-token'] || req.headers.authorization
     const token = authorization && authorization.startsWith('Bearer') && authorization.split(' ')[1]
     await TokenService.DeleteOne({ accessToken: token })
-    return Utils.Success(res, "bump")
+    return res.status(200).json()
 })
 
 module.exports = {
