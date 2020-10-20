@@ -1,29 +1,23 @@
-const { query } = require('express')
-const {User} = require('../models/user.model')
+const User  = require('../models/user.model')
 
 const Find = async (filter) => {
-    const users =  await User.find(filter)
-    return users
+    return await User.find(filter)
 }
 
 const FindOne = async (filter) => {
-    const user = await User.findOne(filter)
-    return user
+    return await User.findOne(filter)
 }
 
 const Create = async (data) => {
-    const user =  await User.create(data)
-    return user
+    return await User.create(data)
 }
 
 const FindOneAndUpdate = async (filter, data) => {
-    const user = await User.findOneAndUpdate(filter, {...data})
-    return user
+    return await User.findOneAndUpdate(filter, {...data})
 }
 
 const DeleteOne = async (filter) => {
-    const user = await User.deleteOne(filter)
-    return user
+    return await User.deleteOne(filter)
 }
 
 module.exports = {

@@ -8,7 +8,8 @@ const GetAllUsers = async (req, res) => {
         })
     } catch (error) {
         return res.status(403).json({
-            message: "Forbidden jutsu not allowed"
+            message: "Forbidden jutsu",
+            error: error.message
         })
     }
 }
@@ -17,7 +18,7 @@ const GetUsersByType = async(req, res) => {
     try {
         const { user_type } = req.params
         const users = await UserService.Find({
-            user_type: user_type
+            userType: user_type
         })
         return res.status(200).json({
             data: users
@@ -58,6 +59,7 @@ const AddUser = async (req, res) => {
             email,
             password,
             country,
+            language,
             userType
         } = req.body
         const existingUser = await UserService.FindOne({
@@ -75,7 +77,7 @@ const AddUser = async (req, res) => {
         })
     } catch (error) {
         return res.status(403).json({
-            message: "Forbidden jutsu not allowed"
+            message: "Forbidden jutsu"
         })
     }
 }
@@ -89,6 +91,7 @@ const UpdateUser = async(req, res) => {
             email,
             password,
             country,
+            language,
             userType
         } = req.body
         const oldData = await UserService.FindOne({
@@ -106,7 +109,7 @@ const UpdateUser = async(req, res) => {
         })
     } catch (error) {
         return res.status(403).json({
-            message: "Forbidden jutsu not allowed"
+            message: "Forbidden jutsu"
         })
     }
 }
@@ -122,7 +125,7 @@ const DeleteUser = async(req, res) => {
         })
     } catch (error) {
         return res.status(403).json({
-            message: "Forbidden jutsu not allowed"
+            message: "Forbidden jutsu"
         })
     }
 }

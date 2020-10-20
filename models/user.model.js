@@ -4,16 +4,24 @@ const UserSchema = new mongoose.Schema(
     {
         username: String,
         name: String,
-        email: String,
+        email: String, 
         password: String,
         country: String,
+        language: String,
         userType: {
             type: String,
-            enum: ['user','ngo_admin','super_admin'],
-            default: 'user'
+            enum: ['user', 'ngo_admin', 'super_admin'],
+            default: 'user',
         },
-    },
-    {
+        createdAt: {
+            type: Date,
+            default: Date.now
+        },
+        updatedAt: {
+            type: Date,
+            default: Date.now
+        }
+    },{
         versionKey: false
     }
 )
