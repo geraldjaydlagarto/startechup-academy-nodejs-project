@@ -13,6 +13,43 @@ const GetAllUsers = async (req, res) => {
     }
 }
 
+const GetUsersByType = async(req, res) => {
+    try {
+        const { user_type } = req.params
+        const users = await UserService.Find({
+            user_type: user_type
+        })
+        return res.status(200).json({
+            data: users
+        })
+    } catch (error) {
+        return res.status(403).json({
+            message: "Forbidden justsu"
+        })
+    }   
+}
+
+const GetUserById = async(req, res) => {
+    try {
+        const { user_id } = req.params
+        const user = await UserService.Find({
+            _id: user_id
+        })
+        if(!user) {
+            return res.status(403).json({
+                message: 'User does not exists'
+            })
+        }
+        return res.status(200).json({
+            data: user
+        })
+    } catch (error) {
+        return res.status(403).json({
+            message: "Forbidden justsu"
+        })
+    }
+}
+
 const AddUser = async (req, res) => {
     try {
         const new_user = {
@@ -84,6 +121,8 @@ const DeleteUser = async(req, res) => {
 
 module.exports = {
     GetAllUsers,
+    GetUserById,
+    GetUsersByType,
     AddUser,
     UpdateUser,
     DeleteUser
