@@ -71,7 +71,7 @@ const DeleteUser = async (req, res) => Utils.Execute(res, async () => {
 
 module.exports = {
     GetAllUsers,
-    GetOrganizationsByUser,
+    GetOrganizationsByUser, 
     GetUserById,
     GetUsersByType,
     AddUser,

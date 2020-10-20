@@ -51,7 +51,8 @@ const ParseUser = {
     password,
     country,
     language,
-    userType
+    userType,
+    organizations
 } = (req) => { return req.body }
 
 module.exports = { User, ParseUser }

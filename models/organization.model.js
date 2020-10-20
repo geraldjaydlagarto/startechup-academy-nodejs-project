@@ -36,6 +36,7 @@ const ParseOrganization = {
     org_country,
     org_city,
     org_picture,
+    admins
 } = (req) => { return req.body }
 
 module.exports = { Organization, ParseOrganization }
