@@ -14,7 +14,7 @@ const Success = (res, data) => {
             data: data
         })
     } else {
-        return res.status(200).json()
+        return res.status(200).json({})
     }
 }
 

@@ -8,7 +8,9 @@ router.get('/users/:userType', UserController.GetUsersByType)
 router.get('/user/:userId', UserController.GetUserById)
 router.get('/user/:userId/organizations', UserController.GetOrganizationsByUser)
 
-router.post('/user', UserController.AddUser)
+router.post('/user/register', UserController.Register)
+router.post('/user/login', UserController.Login)
+router.post('/user/logout', UserController.Logout)
 
 router.put('/user/:userId', UserController.UpdateUser)
 

@@ -1,5 +1,8 @@
 const UserService = require('../services/user.service')
+const TokenService = require('../services/token.service')
 const { ParseUser } = require('../models/user.model')
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 const Utils = require('./utils')
 
 const GetAllUsers = async (req, res) => Utils.Execute(res, async () => {
@@ -35,7 +38,7 @@ const GetUserById = async (req, res) => Utils.Execute(res, async () => {
     return Utils.Success(res, user)
 })
 
-const AddUser = async (req, res) => Utils.Execute(res, async () => {
+const Register = async (req, res) => Utils.Execute(res, async () => {
     const newUser = ParseUser(req)
     const existingUser = await UserService.FindOne({
         email: newUser.email
@@ -69,12 +72,43 @@ const DeleteUser = async (req, res) => Utils.Execute(res, async () => {
     return Utils.Success(res, null)
 })
 
+const Login = async (req, res) => Utils.Execute(res, async () => {
+    const { email, password } = req.body
+    const user = await UserService.FindOne({ email })
+    if (!user) {
+        return Util.Error(res, 400, "Invalid email/password")
+    }
+
+    const valid = user.password && (await bcrypt.compare(password, user.password))
+    if (!valid) {
+        return Util.Error(res, 400, "Invalid email/password")
+    }
+
+    const accessToken = jwt.sign(
+        user.toJSON(),
+        'pangit',
+        {
+            expiresIn: '24h'
+        })
+    const token = await TokenService.Create({ accessToken })
+    return Utils.Success(res, token)
+})
+
+const Logout = async (req, res) => Utils.Execute(res, async () => {
+    const authorization = req.headers['x-access-token'] || req.headers.authorization
+    const token = authorization && authorization.startsWith('Bearer') && authorization.split(' ')[1]
+    await TokenService.DeleteOne({ accessToken: token })
+    return Utils.Success(res, "bump")
+})
+
 module.exports = {
     GetAllUsers,
     GetOrganizationsByUser,
     GetUserById,
     GetUsersByType,
-    AddUser,
+    Register,
+    Login,
+    Logout,
     UpdateUser,
     DeleteUser
 }
