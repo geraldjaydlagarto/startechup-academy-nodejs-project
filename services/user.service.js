@@ -16,6 +16,11 @@ const FindOneAndUpdate = async (filter, data) => {
     return await User.findOneAndUpdate(filter, {...data})
 }
 
+const FindAndPopulate = async(filter, populateField) => {
+    const user = await User.findOne(filter).populate(populateField)
+    return user.organizations
+}
+
 const DeleteOne = async (filter) => {
     return await User.deleteOne(filter)
 }
@@ -25,5 +30,6 @@ module.exports = {
     FindOne,
     Create,
     FindOneAndUpdate,
+    FindAndPopulate,
     DeleteOne
 }

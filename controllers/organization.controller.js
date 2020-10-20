@@ -1,106 +1,63 @@
 const OrganizationService = require("../services/organization.service")
+const { ParseOrganization } = require('../models/organization.model')
 
-const GetAllOrganizations = async (req, res) => {
-    try {
-        const organizations = await OrganizationService.Find()
-        return res.status(200).json({
-            message: 'Ok',
-            data: organizations
+const Utils = require('./utils')
+
+const GetAllOrganizations = async (req, res) => Utils.Execute(res, async => {
+    const organizations = await OrganizationService.Find({})
+    return Utils.Success(res, organizations)
+})
+
+const GetAdminsByOrganization = async (req, res) => Utils.Execute(res, async => {
+    const { organizationId } = req.params
+    const admins = await OrganizationService.FindOneAndPopulate(
+        { _id: organizationId },
+        'admins'
+    )
+    return Utils.Success(res, admins)
+})
+
+const AddOrganization = async (req, res) => Utils.Execute(res, async => {
+    const newOrganization = ParseOrganization(req)
+    const existingOrganization = await OrganizationService.FindOne({
+        org_name
+    })
+    if (existingOrganization) {
+        return res.status(409).json({
+            message: 'Data exists',
         })
-    } catch (error) {
-        console.log('error', error)
     }
-}
+    const organization = await OrganizationService.Create(newOrganization)
+    return Utils.Success(res, organization)
+})
 
-const AddOrganization = async (req, res) => {
-    try {
-        const {
-            org_name,
-            org_description,
-            org_country,
-            org_city,
-            org_picture,
-        } = req.body  
+const UpdateOrganization = async (req, res) => Utils.Execute(res, async => {
+    const { organizationId } = req.params
+    const newData = ParseOrganization(req)
+    const oldData = await OrganizationService.FindOne({
+        _id: organizationId
+    })
 
-        const existing_organization = await OrganizationService.FindOne({
-            org_name
-        })
-
-        if(existing_organization){
-            return res.status(409).json({
-                message: 'Data exists',
-            })
-        }
-
-        await OrganizationService.Create({
-            org_name,
-            org_description,
-            org_country,
-            org_city,
-            org_picture,
-        })
-
-        return res.status(200).json({
-            message: 'Data inserted',
-        })
-    } catch (error) {
-        console.log('error', error)
+    if (!oldData) {
+        return Utils.Error(res, 404, "Organization does not exist.")
     }
-}
 
-const UpdateOrganization = async (req, res) => {
-    try {
-        const { organization_id } = req.params
-        const {
-            org_name,
-            org_description,
-            org_country,
-            org_city,
-            org_picture,
-        } = req.body
-        
-        const organization = await OrganizationService.FindOne({
-            _id: organization_id
-        })
+    const organizaiton = await OrganizationService.FindOneAndUpdate(
+        { _id: organizationId },
+        newData
+    )
+    return Utils.Success(res, organizaiton)
+})
 
-        if(!organization) {
-            return res.status(404).json({
-                message: 'Data not found'
-            })
-        } 
-
-        await OrganizationService.FindOneAndUpdate(
-            { _id: organization_id },
-            {
-                org_name,
-                org_description,
-                org_country,
-                org_city,
-                org_picture,
-            }
-            )
-        return res.status(200).json({
-            message: 'Ok',
-        })   
-    } catch (error) { 
-        console.log('error', error)
-    }
-}
-
-const DeleteOrganization = async (req, res) => {
-    try {
-        const { organization_id } = req.params
-        await OrganizationService.DeleteOne({_id: organization_id})
-        return res.status(200).json({
-            message: 'Deleted',
-        })
-    } catch (error) {
-        console.log('error', error)
-    }
-}
+const DeleteOrganization = async (req, res) => Utils.Execute(res, async => {
+    const { organizationId } = req.params
+    await OrganizationService.DeleteOne({ _id: organizationId })
+    return Utils.Success(res, null)
+})
 
 module.exports = {
     GetAllOrganizations,
+    GetAdminsByOrganization,
     AddOrganization,
     UpdateOrganization,
     DeleteOrganization

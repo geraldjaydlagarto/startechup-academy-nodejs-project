@@ -1,6 +1,4 @@
-const { query } = require('express')
-const Organization = require('../models/organization.model')
-
+const { Organization } = require('../models/organization.model')
 const Find = async () => {
     const organizations =  await Organization.find({})
     return organizations
@@ -21,6 +19,11 @@ const FindOneAndUpdate = async (filter, data) => {
     return organization
 }
 
+const FindOneAndPopulate = async(filter, populateField) => {
+    const organization = await Organization.findOne(filter).populated(populateField)
+    return organization.admins
+}
+
 const DeleteOne = async (filter) => {
     const organization = await Organization.deleteOne(filter)
     return organization
@@ -31,5 +34,6 @@ module.exports = {
     FindOne,
     Create,
     FindOneAndUpdate,
+    FindOneAndPopulate,
     DeleteOne
 }
