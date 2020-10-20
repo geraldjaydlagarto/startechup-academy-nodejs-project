@@ -13,7 +13,7 @@ const UserSchema = new mongoose.Schema(
             type: String,
             enum: ['user', 'ngo_admin', 'super_admin'],
             default: 'user',
-        },
+        }, 
         createdAt: {
             type: Date,
             default: Date.now
@@ -32,8 +32,12 @@ UserSchema.pre('save', async function(next) {
     next()
 })
 
-const User = mongoose.model('user', UserSchema, 'user')
+UserSchema.pre('findOneAndUpdate', async function() {
+    this.update({}, { $set: { updatedAt: new Date() } })
+})
 
+const User = mongoose.model('user', UserSchema, 'user')
+ 
 const ParseUser = {
     username,
     name,

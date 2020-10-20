@@ -39,12 +39,10 @@ const AddUser = async (req, res) => _execute(res, async () => {
     if (existingUser) {
         return _createErroResponse(res, 409, 'User already exist')
     }
-    await UserService.Create(newUser)
+
     return res.status(200).json({
         message: "User inserted",
-        data: await UserService.FindOne({
-            email: newUser.email
-        })
+        data: await UserService.Create(newUser)
     })
 })
 
@@ -57,10 +55,10 @@ const UpdateUser = async (req, res) => _execute(res, async () => {
     if (!oldData) {
         return _createErroResponse(res, 409, 'User does not exist')
     }
-    await UserService.FindOneAndUpdate(newData)
+   
     return res.status(200).json({
         message: "User updated",
-        data: newData
+        data: await UserService.FindOneAndUpdate({_id: user_id}, newData)
     })
 })
 
