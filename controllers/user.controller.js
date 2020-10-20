@@ -7,7 +7,16 @@ const GetAllUsers = async (req, res) => Utils.Execute(res, async () => {
     return Utils.Success(res, users)
 })
 
-const GetUsersByType = async (req, res) => Utils.Execute(res, async () => {
+const GetOrganizationsByUser = async (req, res) => Utils.Execute(res, async () => {
+    const { userId } = req.params
+    const organizations = await UserService.FindAndPopulate({
+        _id, userId},
+        'organizations'
+    )
+    return Utils.Success(res, organizations)
+})
+
+const GetUsersByType = async ( req, res) => Utils.Execute(res, async () => {
     const { user_type } = req.params
     const users = await UserService.Find({
         userType: user_type
@@ -16,9 +25,9 @@ const GetUsersByType = async (req, res) => Utils.Execute(res, async () => {
 })
 
 const GetUserById = async (req, res) => Utils.Execute(res, async () => {
-    const { user_id } = req.params
+    const { userId } = req.params
     const user = await UserService.FindOne({
-        _id: user_id
+        _id: userId
     })
     if (!user) {
         return Utils.Error(res, 409, 'User does not exists')
@@ -39,29 +48,30 @@ const AddUser = async (req, res) => Utils.Execute(res, async () => {
 })
 
 const UpdateUser = async (req, res) => Utils.Execute(res, async () => {
-    const { user_id } = req.params
+    const { userId } = req.params
     const newData = ParseUser(req)
     const oldData = await UserService.FindOne({
-        _id: user_id
+        _id: userId
     })
     if (!oldData) {
         return Utils.Error(res, 409, 'User does not exist')
     }
 
-    const user = await UserService.FindOneAndUpdate({ _id: user_id }, newData)
+    const user = await UserService.FindOneAndUpdate({ _id: userId }, newData)
     return Utils.Success(res, user)
 })
 
 const DeleteUser = async (req, res) => Utils.Execute(res, async () => {
-    const { user_id } = req.params
+    const { userId } = req.params
     await UserService.DeleteOne({
-        _id: user_id
+        _id: userId
     })
     return Utils.Success(res, null)
 })
 
 module.exports = {
     GetAllUsers,
+    GetOrganizationsByUser,
     GetUserById,
     GetUsersByType,
     AddUser,

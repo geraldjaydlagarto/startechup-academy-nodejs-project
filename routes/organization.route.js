@@ -4,8 +4,12 @@ const router = express.Router()
 const OrganizationController = require('../controllers/organization.controller')
 
 router.get('/organizations', OrganizationController.GetAllOrganizations)
+router.get('/organizations/:organizationId/admins', OrganizationController.GetAdminsByOrganization)
+
 router.post('/organization', OrganizationController.AddOrganization)
-router.put('/organization/:organization_id', OrganizationController.UpdateOrganization)
-router.delete('/organization/:organization_id', OrganizationController.DeleteOrganization)
+
+router.put('/organization/:organizationId', OrganizationController.UpdateOrganization)
+
+router.delete('/organization/:organizationId', OrganizationController.DeleteOrganization)
 
 module.exports = router

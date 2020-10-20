@@ -19,7 +19,7 @@ const FindOneAndUpdate = async (filter, data) => {
     return organization
 }
 
-const FindOneAndPopulate = async(filter, populateField) => {
+const FindOneAndPopulate = async (filter, populateField) => {
     const organization = await Organization.findOne(filter).populated(populateField)
     return organization.admins
 }

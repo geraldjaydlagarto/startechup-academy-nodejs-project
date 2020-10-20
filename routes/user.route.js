@@ -5,9 +5,13 @@ const UserController = require('../controllers/user.controller')
 
 router.get('/users', UserController.GetAllUsers)
 router.get('/users/:user_type', UserController.GetUsersByType)
-router.get('/user/:user_id', UserController.GetUserById)
+router.get('/user/:userId', UserController.GetUserById)
+router.get('/users/:userId/organizations', UserController.GetOrganizationsByUser)
+
 router.post('/user', UserController.AddUser)
-router.put('/user/:user_id', UserController.UpdateUser)
-router.delete('/user/:user_id', UserController.DeleteUser)
+
+router.put('/user/:userId', UserController.UpdateUser)
+
+router.delete('/user/:userId', UserController.DeleteUser)
 
 module.exports = router
