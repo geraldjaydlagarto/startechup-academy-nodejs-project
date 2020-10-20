@@ -37,5 +37,16 @@ const ParseUser = {
     language,
     userType
 } = (req) => { return req.body }
+function parseUserFromRequest (req) {
+    return {
+        username,
+        name,
+        email,
+        password,
+        country,
+        language,
+        userType
+    } = req.body
+}
 
 module.exports = { User, ParseUser }
