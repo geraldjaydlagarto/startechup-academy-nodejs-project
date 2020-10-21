@@ -1,15 +1,16 @@
 const express = require('express')
 const router = express.Router()
+const { isAuthenticated } = require('../utils/middleware')
 
 const OrganizationController = require('../controllers/organization.controller')
 
-router.get('/organizations', OrganizationController.GetAllOrganizations)
-router.get('/organization/:organizationId/admins', OrganizationController.GetAdminsByOrganization)
+router.get('/organizations', isAuthenticated, OrganizationController.GetAllOrganizations)
+router.get('/organization/:organizationId/admins', isAuthenticated, OrganizationController.GetAdminsByOrganization)
 
-router.post('/organization', OrganizationController.AddOrganization)
+router.post('/organization', isAuthenticated, OrganizationController.AddOrganization)
 
-router.put('/organization/:organizationId', OrganizationController.UpdateOrganization)
+router.put('/organization/:organizationId', isAuthenticated, OrganizationController.UpdateOrganization)
 
-router.delete('/organization/:organizationId', OrganizationController.DeleteOrganization)
+router.delete('/organization/:organizationId', isAuthenticated, OrganizationController.DeleteOrganization)
 
 module.exports = router
