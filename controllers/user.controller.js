@@ -4,6 +4,8 @@ const { ParseUser } = require('../models/user.model')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const Utils = require('./utils')
+require('dotenv').config()
+const secretKey = process.env.SECRET_KEY
 
 const GetAllUsers = async (req, res) => Utils.Execute(res, async () => {
     const users = await UserService.Find({})
@@ -88,7 +90,7 @@ const Login = async (req, res) => Utils.Execute(res, async () => {
 
     const accessToken = jwt.sign(
         user.toJSON(),
-        'pangit',
+        secretKey,
         {
             expiresIn: '24h'
         })
