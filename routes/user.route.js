@@ -1,9 +1,9 @@
 const express = require('express')
 const router = express.Router()
-
+const { isAuthenticated } = require('../utils/middleware')
 const UserController = require('../controllers/user.controller')
 
-router.get('/users', UserController.GetAllUsers)
+router.get('/users', isAuthenticated, UserController.GetAllUsers)
 router.get('/users/:userType', UserController.GetUsersByType)
 router.get('/user/:userId', UserController.GetUserById)
 router.get('/user/:userId/organizations', UserController.GetOrganizationsByUser)

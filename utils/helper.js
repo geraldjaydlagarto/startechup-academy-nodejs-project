@@ -11,3 +11,7 @@ const jwtVerify = (token) => new Promise((resolve, reject) => {
         resolve(decoded)
     })
 })
+
+module.exports = {
+    jwtVerify
+}
