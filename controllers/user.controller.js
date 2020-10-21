@@ -98,7 +98,7 @@ const Logout = async (req, res) => Utils.Execute(res, async () => {
     const authorization = req.headers['x-access-token'] || req.headers.authorization
     const token = authorization && authorization.startsWith('Bearer') && authorization.split(' ')[1]
     await TokenService.DeleteOne({ accessToken: token })
-    return res.status(200).json()
+    return Utils.Success(res)
 })
 
 module.exports = {
