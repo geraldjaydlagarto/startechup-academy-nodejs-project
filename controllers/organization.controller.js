@@ -40,9 +40,12 @@ const UpdateOrganization = async (req, res) => Utils.Execute(res, async () => {
         return Utils.Error(res, 404, "Organization does not exist")
     }
 
-    const organizaiton = await OrganizationService.FindOneAndUpdate(
+    await OrganizationService.FindOneAndUpdate(
         { _id: organizationId },
         newData
+    )
+    const organizaiton = await OrganizationService.FindOne(
+        { _id: organizationId }
     )
     return Utils.Success(res, organizaiton)
 })

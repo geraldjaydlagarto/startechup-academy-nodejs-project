@@ -46,8 +46,9 @@ const Register = async (req, res) => Utils.Execute(res, async () => {
     if (existingUser) {
         return Utils.Error(res, 409, 'User already exist')
     }
-    const user = await UserService.Create(newUser)
-    return Util.Success(res, user)
+    await UserService.Create(newUser)
+    const user = await UserService.FindOne({email: newUser.email})
+    return Utils.Success(res, user)
 })
 
 const UpdateUser = async (req, res) => Utils.Execute(res, async () => {
@@ -60,7 +61,8 @@ const UpdateUser = async (req, res) => Utils.Execute(res, async () => {
         return Utils.Error(res, 409, 'User does not exist')
     }
 
-    const user = await UserService.FindOneAndUpdate({ _id: userId }, newData)
+    await UserService.FindOneAndUpdate({ _id: userId }, newData)
+    const user = await UserService.FindOne({_id: userId})
     return Utils.Success(res, user)
 })
 
@@ -76,12 +78,12 @@ const Login = async (req, res) => Utils.Execute(res, async () => {
     const { email, password } = req.body
     const user = await UserService.FindOne({ email })
     if (!user) {
-        return Util.Error(res, 400, "Invalid email/password")
+        return Utils.Error(res, 400, "Invalid email/password")
     }
 
     const valid = user.password && (await bcrypt.compare(password, user.password))
     if (!valid) {
-        return Util.Error(res, 400, "Invalid email/password")
+        return Utils.Error(res, 400, "Invalid email/password")
     }
 
     const accessToken = jwt.sign(
