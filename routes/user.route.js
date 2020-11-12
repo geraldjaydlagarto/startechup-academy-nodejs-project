@@ -11,11 +11,16 @@ router.get('/user/:userId', isAuthenticated, UserController.GetUserById)
 router.get('/user/:userId/organizations', isAuthenticated, UserController.GetOrganizationsByUser)
 
 router.post('/user/register', UserController.Register)
-router.post('/user/login', passport.authenticate('local', {session: false}), UserController.Login)
+router.post('/user/login', passport.authenticate('local', { session: false }), UserController.Login)
 router.post('/user/logout', isAuthenticated, UserController.Logout)
 
 router.put('/user/:userId', isAuthenticated, UserController.UpdateUser)
 
 router.delete('/user/:userId', isAuthenticated, UserController.DeleteUser)
 
+app.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }))
+app.get('/google/callback', passport.authenticate('google', { failureRedirect: '/login' }),
+    function (req, res) {
+        return res.status(200).json({ message: 'ok', accessToken: req. })
+    })
 module.exports = router

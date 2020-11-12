@@ -7,6 +7,9 @@ const user = require('./routes/user.route')
 const port = 3000;
 
 db()
+app.get('/fail', (req, res) => {
+    res.send('Authentication Failed')
+})
 app.use(bodyParser.urlencoded( {extended: true}))
 app.use(bodyParser.json({}))
 app.use(organization)
