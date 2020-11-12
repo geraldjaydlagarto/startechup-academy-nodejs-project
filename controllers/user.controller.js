@@ -77,23 +77,14 @@ const DeleteUser = async (req, res) => Utils.Execute(res, async () => {
 })
 
 const Login = async (req, res) => Utils.Execute(res, async () => {
-    const { email, password } = req.body
-    const user = await UserService.FindOne({ email })
-    if (!user) {
-        return Utils.Error(res, 400, "Invalid email/password")
-    }
-
-    const valid = user.password && (await bcrypt.compare(password, user.password))
-    if (!valid) {
-        return Utils.Error(res, 400, "Invalid email/password")
-    }
-
+    const user = req.user
     const accessToken = jwt.sign(
         user.toJSON(),
         secretKey,
         {
             expiresIn: '24h'
         })
+
     const token = await TokenService.Create({ accessToken })
     return Utils.Success(res, token)
 })

@@ -5,7 +5,7 @@ const UserSchema = new mongoose.Schema(
     {
         username: String,
         name: String,
-        email: String, 
+        email: String,
         password: String,
         country: String,
         language: String,
@@ -20,6 +20,22 @@ const UserSchema = new mongoose.Schema(
                 ref: 'organization'
             },
         ],
+        method: {
+            type: String,
+            enum: ['local', 'google', 'facebook'],
+            default: 'local',
+            required: true
+        },
+        google: {
+            id: {
+                type: String
+            }
+        },
+        facebook: {
+            id: {
+                type: String
+            }
+        },
         createdAt: {
             type: Date,
             default: Date.now
@@ -28,28 +44,29 @@ const UserSchema = new mongoose.Schema(
             type: Date,
             default: Date.now
         }
-    },{
-        versionKey: false
-    }
+    }, {
+    versionKey: false
+}
 )
-UserSchema.pre('save', async function(next) {
+UserSchema.pre('save', async function (next) {
     const user = this
-    user.password = user.password &&  await bcrypt.hash(user.password.trim(), 12)
+    user.password = user.password && await bcrypt.hash(user.password.trim(), 12)
     next()
 })
 
-UserSchema.pre('findOneAndUpdate', async function() {
+UserSchema.pre('findOneAndUpdate', async function () {
     this.update({}, { $set: { updatedAt: new Date() } })
 })
 
 const User = mongoose.model('user', UserSchema, 'user')
- 
+
 const ParseUser = {
+    method,
     username,
     name,
     email,
     password,
-    country,
+    country, 
     language,
     userType,
     organizations
